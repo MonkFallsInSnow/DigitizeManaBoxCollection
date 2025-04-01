@@ -1,6 +1,6 @@
 import logging
 from Arguments.arguments import parse_arguments
-from DataManagement.dataHandler import DataHandler
+from DataManagers.dataHandler import DataHandler
 
 def setup_logging():
     """Set up logging configuration"""
