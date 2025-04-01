@@ -24,8 +24,8 @@ def main():
 
         # Read and clean CSV data
         logging.info(f"Reading card data from {args.input_csv}...")
-        dataHandler = DataHandler(args.input_csv)
-        raw_data = dataHandler.get_data()
+        data_handler = DataHandler(args.input_csv)
+        raw_data = data_handler.get_data()
         logging.info(f"Found {len(raw_data)} unique cards in the CSV file.")
 
     except:
