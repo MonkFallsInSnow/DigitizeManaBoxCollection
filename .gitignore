@@ -176,3 +176,6 @@ cython_debug/
 # Tests and Logs
 Tests/
 Logs/
+
+#pycharm
+.idea/
