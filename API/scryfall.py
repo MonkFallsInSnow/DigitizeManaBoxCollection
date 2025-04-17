@@ -6,6 +6,7 @@ import logging
 import json
 from tqdm.asyncio import tqdm as async_tqdm
 from Cards.card import Card
+from Constants.headers import CSVHeaders, APIResponseHeaders
 
 class ScryfallAPI:
     BASE_URL = 'https://api.scryfall.com/cards'
@@ -92,22 +93,23 @@ class ScryfallAPI:
                 card_data = await response.json()
 
                 # Extract relevant fields
-                name = card_data.get('name', csv_data.get('name', 'Unknown'))
-                set_name = card_data.get('set_name', csv_data.get('set_name', 'Unknown Set'))
-                color_identity = card_data.get('color_identity', [])
+                name = card_data.get(APIResponseHeaders.FACE_NAME.value, csv_data.get(CSVHeaders.NAME.value, 'Unknown'))
+                set_name = card_data.get(APIResponseHeaders.SET_NAME.value, csv_data.get(CSVHeaders.SET_NAME.value, 'Unknown Set'))
+                color_identity = card_data.get(APIResponseHeaders.COLOR_IDENTITY.value, [])
 
                 # Get quantity from CSV data
-                quantity = csv_data.get('quantity', 1)
+                quantity = csv_data.get(CSVHeaders.QUANTITY.value, 1)
 
                 # Get front image
                 front_image = await ScryfallAPI._fetch_card_image_async(session, image_front_url)
 
                 # Check if card has back face
-                has_back_face = (
-                                        card_data.get('card_faces') is not None and
-                                        len(card_data.get('card_faces', [])) > 1 and
-                                        'image_uris' in card_data.get('card_faces', [{}])[1]
-                                ) or card_data.get('layout') in ['transform', 'modal_dfc', 'double_faced_token']
+                has_back_face = card_data.get(APIResponseHeaders.LAYOUT.value) in APIResponseHeaders.get_double_sided_layouts()
+                # has_back_face = (
+                #         card_data.get(APIResponseHeaders.CARD_FACES.value) is not None and
+                #         len(card_data.get(APIResponseHeaders.CARD_FACES.value, [])) > 1 and
+                #         APIResponseHeaders.IMAGE_URIS.value in card_data.get(APIResponseHeaders.CARD_FACES.value, [{}])[1]
+                # ) or card_data.get(APIResponseHeaders.LAYOUT.value) in APIResponseHeaders.get_double_sided_layouts()
 
                 # Get back image if exists
                 back_image = None
@@ -128,8 +130,8 @@ class ScryfallAPI:
         except aiohttp.ClientError as e:
             logging.error(f"Network error while fetching card {scryfall_id}: {e}")
             return None
-        except json.JSONDecodeError:
-            logging.error(f"Invalid JSON response for card {scryfall_id}")
+        except json.JSONDecodeError as e:
+            logging.error(f"Invalid JSON response for card {scryfall_id}: {e}")
             return None
         except Exception as e:
             logging.error(f"Unexpected error processing card {scryfall_id}: {e}")

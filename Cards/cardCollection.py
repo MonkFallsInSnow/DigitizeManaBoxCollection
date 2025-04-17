@@ -18,8 +18,10 @@ class CardCollection:
     def build_collection(self, csv_data):
         try:
             cards = asyncio.run(ScryfallAPI.fetch_all_cards(csv_data, self._image_size))
+
             for card in cards:
                 self._cards[card.scryfall_id] = card
+
             logging.info(f"Collection built with {len(self._cards)} cards")
         except Exception as e:
             logging.error(f"Error building collection: {e}")

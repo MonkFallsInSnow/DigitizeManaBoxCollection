@@ -11,3 +11,9 @@ class APIResponseHeaders(Enum):
     CARD_FACES = 'card_faces'
     IMAGE_URIS = 'image_uris'
     FACE_NAME = 'name'
+    SET_NAME = 'set_name'
+    LAYOUT = 'layout'
+
+    @staticmethod
+    def get_double_sided_layouts():
+        return ['transform', 'modal_dfc', 'double_faced_token']
