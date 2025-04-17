@@ -23,5 +23,5 @@ class ColorIdentity(Enum):
         return lst
 
     @staticmethod
-    def get_identity(colors):
+    def construct_named_identity(colors):
         return '-'.join(colors)
