@@ -96,7 +96,7 @@ class ScryfallAPI:
                 name = card_data.get(APIResponseHeaders.FACE_NAME.value, csv_data.get(CSVHeaders.NAME.value, 'Unknown'))
                 set_name = card_data.get(APIResponseHeaders.SET_NAME.value, csv_data.get(CSVHeaders.SET_NAME.value, 'Unknown Set'))
                 color_identity = card_data.get(APIResponseHeaders.COLOR_IDENTITY.value, [])
-
+                type_line = card_data.get(APIResponseHeaders.TYPE_LINE, 'Unknown Type')
                 # Get quantity from CSV data
                 quantity = csv_data.get(CSVHeaders.QUANTITY.value, 1)
 
@@ -123,6 +123,7 @@ class ScryfallAPI:
                     name=name,
                     set_name=set_name,
                     color_identity=color_identity,
+                    type_line=type_line,
                     front_image=front_image,
                     back_image=back_image
                 )
