@@ -13,6 +13,7 @@ class APIResponseHeaders(Enum):
     FACE_NAME = 'name'
     SET_NAME = 'set_name'
     LAYOUT = 'layout'
+    TYPE_LINE = 'type_line'
 
     @staticmethod
     def get_double_sided_layouts():
