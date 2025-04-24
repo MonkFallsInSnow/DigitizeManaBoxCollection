@@ -1,4 +1,4 @@
-class TypeData:
+class CardTypeData:
     def __init__(self, front_face_supertypes=None, front_face_types=None, front_face_subtypes=None,
                  back_face_supertypes=None, back_face_types=None, back_face_subtypes=None):
         self._front_face_supertypes = front_face_supertypes

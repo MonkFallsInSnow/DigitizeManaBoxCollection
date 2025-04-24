@@ -1,5 +1,5 @@
-from Constants.type_data import CardTypes, SuperTypes, TypeLineDelimiters
-from Cards.cardTypeData import TypeData
+from Constants.cardTypes import CardTypes, SuperTypes, TypeLineDelimiters
+from Cards.cardTypeData import CardTypeData
 
 class CardType:
     def __init__(self, type_line):
@@ -27,7 +27,7 @@ class CardType:
         front_face_types = CardType._extract_types(front_face_type_line)
         front_face_subtypes = front_face_subtype_line.split()
 
-        return TypeData(
+        return CardTypeData(
             front_face_supertypes=front_face_supertypes,
             front_face_types=front_face_types,
             front_face_subtypes=front_face_subtypes
@@ -55,7 +55,7 @@ class CardType:
         back_face_types = CardType._extract_types(back_face_types)
         back_face_subtypes = back_face_subtypes.split()
 
-        return TypeData(
+        return CardTypeData(
             front_face_supertypes=front_face_supertypes,
             front_face_types=front_face_types,
             front_face_subtypes=front_face_subtypes,
