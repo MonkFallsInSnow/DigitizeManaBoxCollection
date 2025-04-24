@@ -8,22 +8,16 @@ class CardTypes(Enum):
     ENCHANTMENT = 'enchantment'
     INSTANT = 'instant'
     LAND = 'land'
-    LEGENDARY = 'legendary'
     PLANESWALKER = 'planeswalker'
     SORCERY = 'sorcery'
+    OTHER = 'other'
 
-    @staticmethod
-    def clean_data(data):
-        return data.strip()
-
-    @staticmethod
-    def validate_types(data, default='other'):
-        for i in range(len(data)):
-            if data[i] not in CardTypes:
-                data[i] = default
-
-        return data
-
+class SuperTypes(Enum):
+    BASIC = 'basic'
+    LEGENDARY = 'legendary'
+    ONGOING = 'ongoing'
+    SNOW = 'snow'
+    WORLD = 'world'
 
 class TypeLineDelimiters(Enum):
     MULTI_FACE = '//'

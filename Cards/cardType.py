@@ -1,42 +1,91 @@
-from Constants.type_data import CardTypes
-from Constants.type_data import TypeLineDelimiters
+from Constants.type_data import CardTypes, SuperTypes, TypeLineDelimiters
+from Cards.cardTypeData import TypeData
+
 class CardType:
     def __init__(self, type_line):
         self._type_line = type_line.lower()
         self._type_data = self._parse_type_line()
 
-    # TODO: deal with subtypes, if you feel like it...
     def _parse_type_line(self):
-        type_data = {'front': [], 'back': [], 'legendary': False}
-        type_line  = self._type_line
+        type_data = None
 
-        if CardTypes.LEGENDARY.value in self._type_line:
-            type_data[CardTypes.LEGENDARY.value] = True
-            type_line = type_line.replace(CardTypes.LEGENDARY.value, '')
-
-        if TypeLineDelimiters.MULTI_FACE.value in type_line:
-            front_types, back_types = type_line.split(TypeLineDelimiters.MULTI_FACE.value)
-            front_types, _ = front_types.split(TypeLineDelimiters.SUBTYPE.value)
-            back_types, _ = back_types.split(TypeLineDelimiters.SUBTYPE.value)
-
-            front_types = front_types.split()
-            back_types = back_types.split()
-            #type_data['subtypes'] = ''.join([front_subtype, back_subtype]).split()
-
-            #back_types, subtype = back_types.split(TypeLineDelimiters.SUBTYPE.value)
-            #type_data['subtypes'].append(subtype)
-
-            type_data['front'] = CardTypes.validate_types(front_types)
-            type_data['back'] = CardTypes.validate_types(back_types)
-        elif TypeLineDelimiters.SUBTYPE.value in type_line:
-            front_types, _ = type_line.split(TypeLineDelimiters.SUBTYPE.value)
-            front_types = front_types.split()
-            type_data['front'] = CardTypes.validate_types(front_types)
+        if TypeLineDelimiters.MULTI_FACE.value not in self._type_line:
+            type_data = self._get_single_face_types()
         else:
-            type_data['front'].append(type_line)
-
+            type_data = self._get_multi_face_types()
 
         return type_data
+
+    def _get_single_face_types(self):
+        if TypeLineDelimiters.SUBTYPE.value not in self._type_line:
+            front_face_type_line = self._type_line
+            front_face_subtype_line = ''
+        else:
+            front_face_type_line, front_face_subtype_line = self._type_line.split(TypeLineDelimiters.SUBTYPE.value)
+
+        front_face_supertypes = CardType._extract_supertypes(front_face_type_line)
+        front_face_types = CardType._extract_types(front_face_type_line)
+        front_face_subtypes = front_face_subtype_line.split()
+
+        return TypeData(
+            front_face_supertypes=front_face_supertypes,
+            front_face_types=front_face_types,
+            front_face_subtypes=front_face_subtypes
+        )
+
+    def _get_multi_face_types(self):
+        front_face_type_line, back_face_type_line = self._type_line.split(TypeLineDelimiters.MULTI_FACE.value)
+        front_face_supertypes = CardType._extract_supertypes(front_face_type_line)
+        back_face_supertypes = CardType._extract_supertypes(back_face_type_line)
+
+        if TypeLineDelimiters.SUBTYPE.value not in front_face_type_line:
+            front_face_types = front_face_type_line
+            front_face_subtypes = ''
+        else:
+            front_face_types, front_face_subtypes = front_face_type_line.split(TypeLineDelimiters.SUBTYPE.value)
+
+        if TypeLineDelimiters.SUBTYPE.value not in back_face_type_line:
+            back_face_types = back_face_type_line
+            back_face_subtypes = ''
+        else:
+            back_face_types, back_face_subtypes = back_face_type_line.split(TypeLineDelimiters.SUBTYPE.value)
+
+        front_face_types = CardType._extract_types(front_face_types)
+        front_face_subtypes = front_face_subtypes.split()
+        back_face_types = CardType._extract_types(back_face_types)
+        back_face_subtypes = back_face_subtypes.split()
+
+        return TypeData(
+            front_face_supertypes=front_face_supertypes,
+            front_face_types=front_face_types,
+            front_face_subtypes=front_face_subtypes,
+            back_face_supertypes=back_face_supertypes,
+            back_face_types=back_face_types,
+            back_face_subtypes=back_face_subtypes
+        )
+
+    @staticmethod
+    def _extract_supertypes(type_line_component):
+        return CardType._get_type(type_line_component, SuperTypes, SuperTypes.BASIC.value)
+
+    @staticmethod
+    def _extract_types(type_line_component):
+        return CardType._get_type(type_line_component, CardTypes, CardTypes.OTHER.value)
+
+    @staticmethod
+    def _get_type(type_line_component, type_kind, default):
+        types = []
+        type_line_component = type_line_component.split()
+
+        for component in type_line_component:
+            for kind in type_kind:
+                if component == kind.value and component not in TypeLineDelimiters:
+                    types.append(kind.value)
+
+        if len(types) == 0:
+            types.append(default)
+
+        return types
 
     def __str__(self):
         return str(self._type_data)
