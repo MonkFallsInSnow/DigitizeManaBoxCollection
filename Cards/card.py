@@ -9,7 +9,7 @@ class Card:
         self._set_name = set_name
         self._rarity = rarity
         self._color_identity = color_identity
-        self._card_type = CardType(type_line)
+        self._card_types = CardType(type_line)
         self._front_image = front_image
         self._back_image = back_image
 
@@ -40,7 +40,7 @@ class Card:
 
     @property
     def card_types(self):
-        return self._card_type
+        return self._card_types
     
     @property
     def front_image(self):
@@ -57,4 +57,4 @@ class Card:
     def __str__(self):
         return f'Name: {self._name}\nQuantity: {self._quantity}\nSet: {self.set_name}\n'\
                f'Rarity: {self._rarity}\nColor Identity: {self._color_identity}\n'\
-               f'Card Type(s): {self._card_type}'
+               f'Card Type(s): {self._card_types}'

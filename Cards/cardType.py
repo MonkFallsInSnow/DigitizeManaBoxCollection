@@ -6,6 +6,10 @@ class CardType:
         self._type_line = type_line.lower()
         self._type_data = self._parse_type_line()
 
+    @property
+    def type_data(self):
+        return self._type_data
+
     def _parse_type_line(self):
         type_data = None
 
