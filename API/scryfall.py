@@ -13,11 +13,6 @@ class ScryfallAPI:
 
     @staticmethod
     def rate_limiter(func):
-        """
-        A decorator that adds a small random delay before executing
-        an asynchronous function to implement simple rate limiting.
-        """
-
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
             await asyncio.sleep(random.uniform(0.02, 0.05))
@@ -94,22 +89,17 @@ class ScryfallAPI:
 
                 # Extract relevant fields
                 name = card_data.get(APIResponseHeaders.FACE_NAME.value, csv_data.get(CSVHeaders.NAME.value, 'Unknown'))
+                quantity = csv_data.get(CSVHeaders.QUANTITY.value, 1)
                 set_name = card_data.get(APIResponseHeaders.SET_NAME.value, csv_data.get(CSVHeaders.SET_NAME.value, 'Unknown Set'))
+                rarity = card_data.get(APIResponseHeaders.RARITY.value, csv_data.get(CSVHeaders.RARITY.value, 'Unknown Rarity'))
                 color_identity = card_data.get(APIResponseHeaders.COLOR_IDENTITY.value, [])
                 type_line = card_data.get(APIResponseHeaders.TYPE_LINE, 'Unknown Type')
-                # Get quantity from CSV data
-                quantity = csv_data.get(CSVHeaders.QUANTITY.value, 1)
 
                 # Get front image
                 front_image = await ScryfallAPI._fetch_card_image_async(session, image_front_url)
 
                 # Check if card has back face
                 has_back_face = card_data.get(APIResponseHeaders.LAYOUT.value) in APIResponseHeaders.get_double_sided_layouts()
-                # has_back_face = (
-                #         card_data.get(APIResponseHeaders.CARD_FACES.value) is not None and
-                #         len(card_data.get(APIResponseHeaders.CARD_FACES.value, [])) > 1 and
-                #         APIResponseHeaders.IMAGE_URIS.value in card_data.get(APIResponseHeaders.CARD_FACES.value, [{}])[1]
-                # ) or card_data.get(APIResponseHeaders.LAYOUT.value) in APIResponseHeaders.get_double_sided_layouts()
 
                 # Get back image if exists
                 back_image = None
@@ -122,6 +112,7 @@ class ScryfallAPI:
                     quantity=quantity,
                     name=name,
                     set_name=set_name,
+                    rarity=rarity,
                     color_identity=color_identity,
                     type_line=type_line,
                     front_image=front_image,

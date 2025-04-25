@@ -1,12 +1,13 @@
 from .cardType import CardType
 
 class Card:
-    def __init__(self, scryfall_id, quantity=1, name=None, set_name=None, color_identity=None,
+    def __init__(self, scryfall_id, quantity=1, name=None, set_name=None, rarity='', color_identity=None,
                  type_line='', front_image=None, back_image=None):
         self._scryfall_id = scryfall_id
         self._quantity = quantity
         self._name = name
         self._set_name = set_name
+        self._rarity = rarity
         self._color_identity = color_identity
         self._card_type = CardType(type_line)
         self._front_image = front_image
@@ -30,6 +31,10 @@ class Card:
         return self._set_name
 
     @property
+    def rarity(self):
+        return self._rarity
+
+    @property
     def color_identity(self):
         return self._color_identity
 
@@ -51,5 +56,5 @@ class Card:
 
     def __str__(self):
         return f'Name: {self._name}\nQuantity: {self._quantity}\nSet: {self.set_name}\n'\
-               f'Color Identity: {self._color_identity}\nCard Type(s): {self._card_type}\n'\
-               f'Front Image: {self._front_image}\nBack Image: {self._back_image}'
+               f'Rarity: {self._rarity}\nColor Identity: {self._color_identity}\n'\
+               f'Card Type(s): {self._card_type}'

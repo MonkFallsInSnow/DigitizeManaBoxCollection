@@ -5,6 +5,7 @@ class CSVHeaders(Enum):
     QUANTITY = 'quantity'
     NAME = 'name'
     SET_NAME = 'set name'
+    RARITY = 'rarity'
 
 class APIResponseHeaders(Enum):
     COLOR_IDENTITY = 'color_identity'
@@ -14,6 +15,7 @@ class APIResponseHeaders(Enum):
     SET_NAME = 'set_name'
     LAYOUT = 'layout'
     TYPE_LINE = 'type_line'
+    RARITY = 'rarity'
 
     @staticmethod
     def get_double_sided_layouts():
