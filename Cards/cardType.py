@@ -11,8 +11,6 @@ class CardType:
         return self._type_data
 
     def _parse_type_line(self):
-        type_data = None
-
         if TypeLineDelimiters.MULTI_FACE.value not in self._type_line:
             type_data = self._get_single_face_types()
         else:
