@@ -14,7 +14,6 @@ def setup_logging():
         ]
     )
 
-
 def main():
     try:
         setup_logging()
@@ -22,6 +21,7 @@ def main():
 
         # Parse command line arguments
         args = parse_arguments()
+        logging.info(f'Supplied arguments: {args}')
 
         # Read and clean CSV data
         logging.info(f'Reading card data from {args.input_csv}...')

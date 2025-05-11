@@ -1,6 +1,6 @@
-from enum import Enum
+from enum import StrEnum
 
-class ColorIdentity(Enum):
+class ColorIdentity(StrEnum):
     W = 'White'
     U = 'Blue'
     B = 'Black'
@@ -10,18 +10,18 @@ class ColorIdentity(Enum):
 
 
     @staticmethod
-    def to_sorted_list(colors):
+    def to_value_list(colors):
         if len(colors) == 0:
-            return [ColorIdentity.C.value]
+            return [ColorIdentity.C]
 
         lst = []
         for color_identity in ColorIdentity:
             if color_identity.name in colors:
                 lst.append(color_identity.value)
 
-        lst.sort()
         return lst
 
     @staticmethod
-    def construct_named_identity(colors):
-        return '-'.join(colors)
+    def to_verbose_color_identity(colors):
+        sorted_list = sorted(ColorIdentity.to_value_list(colors))
+        return '-'.join(sorted_list)

@@ -11,7 +11,7 @@ class CardType:
         return self._type_data
 
     def _parse_type_line(self):
-        if TypeLineDelimiters.MULTI_FACE.value not in self._type_line:
+        if TypeLineDelimiters.MULTI_FACE not in self._type_line:
             type_data = self._get_single_face_types()
         else:
             type_data = self._get_multi_face_types()
@@ -19,11 +19,11 @@ class CardType:
         return type_data
 
     def _get_single_face_types(self):
-        if TypeLineDelimiters.SUBTYPE.value not in self._type_line:
+        if TypeLineDelimiters.SUBTYPE not in self._type_line:
             front_face_type_line = self._type_line
             front_face_subtype_line = ''
         else:
-            front_face_type_line, front_face_subtype_line = self._type_line.split(TypeLineDelimiters.SUBTYPE.value)
+            front_face_type_line, front_face_subtype_line = self._type_line.split(TypeLineDelimiters.SUBTYPE)
 
         front_face_supertypes = CardType._extract_supertypes(front_face_type_line)
         front_face_types = CardType._extract_types(front_face_type_line)
@@ -36,21 +36,21 @@ class CardType:
         )
 
     def _get_multi_face_types(self):
-        front_face_type_line, back_face_type_line = self._type_line.split(TypeLineDelimiters.MULTI_FACE.value)
+        front_face_type_line, back_face_type_line = self._type_line.split(TypeLineDelimiters.MULTI_FACE)
         front_face_supertypes = CardType._extract_supertypes(front_face_type_line)
         back_face_supertypes = CardType._extract_supertypes(back_face_type_line)
 
-        if TypeLineDelimiters.SUBTYPE.value not in front_face_type_line:
+        if TypeLineDelimiters.SUBTYPE not in front_face_type_line:
             front_face_types = front_face_type_line
             front_face_subtypes = ''
         else:
-            front_face_types, front_face_subtypes = front_face_type_line.split(TypeLineDelimiters.SUBTYPE.value)
+            front_face_types, front_face_subtypes = front_face_type_line.split(TypeLineDelimiters.SUBTYPE)
 
-        if TypeLineDelimiters.SUBTYPE.value not in back_face_type_line:
+        if TypeLineDelimiters.SUBTYPE not in back_face_type_line:
             back_face_types = back_face_type_line
             back_face_subtypes = ''
         else:
-            back_face_types, back_face_subtypes = back_face_type_line.split(TypeLineDelimiters.SUBTYPE.value)
+            back_face_types, back_face_subtypes = back_face_type_line.split(TypeLineDelimiters.SUBTYPE)
 
         front_face_types = CardType._extract_types(front_face_types)
         front_face_subtypes = front_face_subtypes.split()
