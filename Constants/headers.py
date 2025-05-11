@@ -1,21 +1,21 @@
-from enum import Enum
+from enum import StrEnum, auto
 
-class CSVHeaders(Enum):
+class CSVHeaders(StrEnum):
     SCRYFALL_ID = 'scryfall id'
-    QUANTITY = 'quantity'
-    NAME = 'name'
+    QUANTITY = auto()
+    NAME = auto()
     SET_NAME = 'set name'
-    RARITY = 'rarity'
+    RARITY = auto()
 
-class APIResponseHeaders(Enum):
-    COLOR_IDENTITY = 'color_identity'
-    CARD_FACES = 'card_faces'
-    IMAGE_URIS = 'image_uris'
-    FACE_NAME = 'name'
-    SET_NAME = 'set_name'
-    LAYOUT = 'layout'
-    TYPE_LINE = 'type_line'
-    RARITY = 'rarity'
+class APIResponseHeaders(StrEnum):
+    COLOR_IDENTITY = auto()
+    CARD_FACES = auto()
+    IMAGE_URIS = auto()
+    FACE_NAME = auto()
+    SET_NAME = auto()
+    LAYOUT = auto()
+    TYPE_LINE = auto()
+    RARITY = auto()
 
     @staticmethod
     def get_double_sided_layouts():

@@ -1,26 +1,24 @@
-from enum import Enum
+from enum import StrEnum, auto
 
-class CardTypes(Enum):
-    ARTIFACT = 'artifact'
-    BATTLE = 'battle'
-    CARD = 'card'
-    CREATURE = 'creature'
-    ENCHANTMENT = 'enchantment'
-    INSTANT = 'instant'
-    LAND = 'land'
-    PLANESWALKER = 'planeswalker'
-    SORCERY = 'sorcery'
-    OTHER = 'other'
+class SuperTypes(StrEnum):
+    BASIC = auto()
+    LEGENDARY = auto()
+    ONGOING = auto()
+    SNOW = auto()
+    WORLD = auto()
 
-class SuperTypes(Enum):
-    BASIC = 'basic'
-    LEGENDARY = 'legendary'
-    ONGOING = 'ongoing'
-    SNOW = 'snow'
-    WORLD = 'world'
+class CardTypes(StrEnum):
+    ARTIFACT = auto()
+    BATTLE = auto()
+    CARD = auto()
+    CREATURE = auto()
+    ENCHANTMENT = auto()
+    INSTANT = auto()
+    LAND = auto()
+    PLANESWALKER = auto()
+    SORCERY = auto()
+    OTHER = auto()
 
-class TypeLineDelimiters(Enum):
+class TypeLineDelimiters(StrEnum):
     MULTI_FACE = '//'
     SUBTYPE = '—'
-
-

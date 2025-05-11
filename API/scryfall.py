@@ -34,7 +34,6 @@ class ScryfallAPI:
             csv_data: Dictionary of card data from CSV
             image_size: Size of images to fetch ('small', 'normal', 'large', etc.)
             concurrency_limit: Maximum number of concurrent requests
-
         Returns:
             List of Card objects
         """
@@ -61,7 +60,6 @@ class ScryfallAPI:
                             image_back_url=image_back_url,
                             scryfall_id=sid,
                             csv_data=data,
-                            image_size=image_size
                         )
 
                 tasks.append(bounded_fetch(scryfall_id, card_data))
@@ -77,7 +75,7 @@ class ScryfallAPI:
 
     @staticmethod
     @rate_limiter
-    async def _fetch_card_async(session, url, image_front_url, image_back_url, scryfall_id, csv_data, image_size):
+    async def _fetch_card_async(session, url, image_front_url, image_back_url, scryfall_id, csv_data):
         try:
             # Get card data from Scryfall API
             async with session.get(url) as response:
@@ -88,18 +86,18 @@ class ScryfallAPI:
                 card_data = await response.json()
 
                 # Extract relevant fields
-                name = card_data.get(APIResponseHeaders.FACE_NAME.value, csv_data.get(CSVHeaders.NAME.value, 'Unknown'))
-                quantity = csv_data.get(CSVHeaders.QUANTITY.value, 1)
-                set_name = card_data.get(APIResponseHeaders.SET_NAME.value, csv_data.get(CSVHeaders.SET_NAME.value, 'Unknown Set'))
-                rarity = card_data.get(APIResponseHeaders.RARITY.value, csv_data.get(CSVHeaders.RARITY.value, 'Unknown Rarity'))
-                color_identity = card_data.get(APIResponseHeaders.COLOR_IDENTITY.value, [])
+                name = card_data.get(APIResponseHeaders.FACE_NAME, csv_data.get(CSVHeaders.NAME, 'Unknown'))
+                quantity = csv_data.get(CSVHeaders.QUANTITY, 1)
+                set_name = card_data.get(APIResponseHeaders.SET_NAME, csv_data.get(CSVHeaders.SET_NAME, 'Unknown Set'))
+                rarity = card_data.get(APIResponseHeaders.RARITY, csv_data.get(CSVHeaders.RARITY, 'Unknown Rarity'))
+                color_identity = card_data.get(APIResponseHeaders.COLOR_IDENTITY, [])
                 type_line = card_data.get(APIResponseHeaders.TYPE_LINE, 'Unknown Type')
 
                 # Get front image
                 front_image = await ScryfallAPI._fetch_card_image_async(session, image_front_url)
 
                 # Check if card has back face
-                has_back_face = card_data.get(APIResponseHeaders.LAYOUT.value) in APIResponseHeaders.get_double_sided_layouts()
+                has_back_face = card_data.get(APIResponseHeaders.LAYOUT) in APIResponseHeaders.get_double_sided_layouts()
 
                 # Get back image if exists
                 back_image = None

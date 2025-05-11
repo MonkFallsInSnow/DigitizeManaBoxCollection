@@ -8,10 +8,10 @@ class DataHandler:
         self._file_path = file_path
         self._df = None
         self._required_headers = {
-            CSVHeaders.SCRYFALL_ID.value,
-            CSVHeaders.QUANTITY.value,
-            CSVHeaders.NAME.value,
-            CSVHeaders.SET_NAME.value
+            CSVHeaders.SCRYFALL_ID,
+            CSVHeaders.QUANTITY,
+            CSVHeaders.NAME,
+            CSVHeaders.SET_NAME
         }
 
     @property
@@ -40,12 +40,12 @@ class DataHandler:
         cleaned_df = self._df.dropna(subset=[CSVHeaders.SCRYFALL_ID.value, CSVHeaders.QUANTITY.value])
 
         # Convert Quantity to integer, replace invalid values with 1
-        cleaned_df[CSVHeaders.QUANTITY.value] = (pd.to_numeric(cleaned_df[CSVHeaders.QUANTITY.value], errors='coerce').
+        cleaned_df[CSVHeaders.QUANTITY] = (pd.to_numeric(cleaned_df[CSVHeaders.QUANTITY], errors='coerce').
                                                  fillna(1).
                                                  astype(int))
 
         # Group by Scryfall ID and sum quantities
-        grouped_df = cleaned_df.groupby(CSVHeaders.SCRYFALL_ID.value, as_index=False).agg({
+        grouped_df = cleaned_df.groupby(CSVHeaders.SCRYFALL_ID, as_index=False).agg({
             CSVHeaders.QUANTITY.value: 'sum',
             CSVHeaders.NAME.value: 'first',
             CSVHeaders.SET_NAME.value: 'first'
@@ -53,10 +53,10 @@ class DataHandler:
 
         # Convert to dictionary format
         cleaned_data = {
-            row[CSVHeaders.SCRYFALL_ID.value]: {
-                CSVHeaders.QUANTITY.value: row[CSVHeaders.QUANTITY.value],
-                CSVHeaders.NAME.value: row[CSVHeaders.NAME.value],
-                CSVHeaders.SET_NAME.value: row[CSVHeaders.SET_NAME.value]
+            row[CSVHeaders.SCRYFALL_ID]: {
+                CSVHeaders.QUANTITY.value: row[CSVHeaders.QUANTITY],
+                CSVHeaders.NAME.value: row[CSVHeaders.NAME],
+                CSVHeaders.SET_NAME.value: row[CSVHeaders.SET_NAME]
             }
             for _, row in grouped_df.iterrows()
         }
@@ -70,7 +70,5 @@ class DataHandler:
         except Exception:
             logging.error(f'Unable to parse {self._file_path}')
             raise
-
-
 
 
