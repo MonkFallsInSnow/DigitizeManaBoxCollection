@@ -1,6 +1,7 @@
 import logging
 from Arguments.arguments import parse_arguments
 from DataManagers.dataHandler import DataHandler
+from DataManagers.directoryBuilder import DirectoryBuilder
 from Cards.cardCollection import CardCollection
 
 def setup_logging():
@@ -36,8 +37,17 @@ def main():
             collection.build_collection(csv_data)
             logging.info(f"Collection built. {len(collection.cards)} cards in collection")
 
-            # TODO: Build directory structure and add cards
+            # Build directory structure and add cards
+            if collection.cards:
+                logging.info("Building directory structure for the collection...")
+                # args.output_dir is a string from argparse.
+                # args.organization is a list of strings e.g. ['color', 'type']
 
+                builder = DirectoryBuilder(output_dir_str=args.output_dir)  # Uses default "MTG_Collection"
+                builder.build_directories(collection, args.organization)
+                logging.info("Directory structure generation complete.")
+            else:
+                logging.info("No cards in collection to build directories for.")
         except Exception as e:
             logging.error(f'Fatal error occurred: {e}')
     #TODO: select appropriate Exception and handle

@@ -10,12 +10,14 @@ from Constants.headers import CSVHeaders, APIResponseHeaders
 
 class ScryfallAPI:
     BASE_URL = 'https://api.scryfall.com/cards'
+    RATE_LIMIT_MIN = 0.05
+    RATE_LIMIT_MAX = 0.1
 
     @staticmethod
     def rate_limiter(func):
         @functools.wraps(func)
         async def wrapper(*args, **kwargs):
-            await asyncio.sleep(random.uniform(0.02, 0.05))
+            await asyncio.sleep(random.uniform(ScryfallAPI.RATE_LIMIT_MIN, ScryfallAPI.RATE_LIMIT_MAX))
             return await func(*args, **kwargs)
 
         return wrapper
