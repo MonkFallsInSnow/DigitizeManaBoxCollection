@@ -36,7 +36,7 @@ def main():
             collection.build_collection(csv_data)
             logging.info(f"Collection built. {len(collection.cards)} cards in collection")
 
-            #Build directory structure and add cards
+            # TODO: Build directory structure and add cards
 
         except Exception as e:
             logging.error(f'Fatal error occurred: {e}')
